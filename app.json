@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "PasswordApp",
-    "slug": "PasswordApp",
+    "slug": "passwordapp",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,10 +24,17 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.jteuho.passwordapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "8b180270-6a31-452d-88c1-1deb5ee9cd05"
+      }
+    },
+    "owner": "jteuho"
   }
 }
