@@ -11,6 +11,7 @@ import { getDatabase, push, ref, onValue, remove } from'firebase/database';
 
 export default function App() {
 
+  //configurations for Firebase database
   const firebaseConfig = {
     apiKey: "AIzaSyDiN2spVurkNTasXlLeCV2PYalQXMW4Tx8",
     authDomain: "passwordapp-c71a3.firebaseapp.com",
@@ -22,7 +23,7 @@ export default function App() {
     measurementId: "G-VB65R1F2T7"
   };
 
-  // Initialize Firebase
+  //initialize Firebase
   const app = initializeApp(firebaseConfig);
   const database = getDatabase(app);
 
@@ -30,6 +31,7 @@ export default function App() {
   const [appName, setAppName] = useState('');
   const [pass, setPass] = useState('');
 
+  //parameters for password generator
   let length = 8
   let upper = "on"
   let lower = "on"
@@ -45,6 +47,7 @@ export default function App() {
     });
   }, []);
 
+  //save funtction 
   const savePassword = () =>{
     console.log(appName + pass)
     console.log(passwords)
@@ -54,10 +57,29 @@ export default function App() {
       );
   }
 
-  const deleteProduct = (key) => {
+  //delete function
+  const deletePassword = (key) => {
     remove(
       ref(database, 'passwords/' + key),
     )
+  }
+  //fetch password from api
+  const getPassword = async () => {
+    try {
+      const response = await fetch(
+        `https://passwordwolf.com/api/?length=${length}&upper=${upper}&lower=${lower}&special=${special}&numbers=${numbers}&repeat=1`
+        );
+      const data = await response.json();
+      const generatedPassword = await data[0].password;
+      setPass(generatedPassword);
+      
+      console.log(data)
+      console.log(generatedPassword)
+      console.log("Generated password: " + pass)
+
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   const listSeparator = () => {
@@ -83,31 +105,13 @@ export default function App() {
         </View>
         <View style={{ flex: 1 }}>
         <MaterialCommunityIcons name="trash-can" size={ 30 } color="red"
-              onPress={() => deleteProduct(item.key)} />
+              onPress={() => deletePassword(item.key)} />
           </View>
         </View>
       </ListItem.Content>
     </ListItem>
   );
-
-    const getPassword = async () => {
-      try {
-        const response = await fetch(
-          `https://passwordwolf.com/api/?length=${length}&upper=${upper}&lower=${lower}&special=${special}&numbers=${numbers}&repeat=1`
-          );
-        const data = await response.json();
-        const generatedPassword = await data[0].password;
-        setPass(generatedPassword);
-        
-        console.log(data)
-        console.log(generatedPassword)
-        console.log("Generated password: " + pass)
   
-      } catch (error) {
-        console.error(error)
-      }
-    }
-
   return (
     <View style={styles.container}>
 
